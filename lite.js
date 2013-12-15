@@ -35,17 +35,16 @@ function RunMe(){
 
  try{//Check
 	if(e){//already exist...
-	 if(areSameFunction(e,script)){//equal
+	 if(RunMe.SkipCheck||areSameFunction(e,script)){//equal
 		happen(RunMe.again)
 	 }else{//different!
 		var i,j=1;while(1){i=String(alias+j);e=w[i];if(!e){break}else if(areSameFunction(e,script)){i=0;break};j++};
 		if(i){RunMe.alias=i;e=Build('relocate')};
 	 };
 	}else{//make!
-	 e=Build('exnovo');Object.freeze(e);console.dir(e);
+	 e=Build('exnovo');Object.freeze(e);RunMe.SkipCheck=1;console.dir(e);
 	};
  }catch(fault){
   console.wrong(fault);
  };
 };
-//
