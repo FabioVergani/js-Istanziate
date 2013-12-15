@@ -1,0 +1,85 @@
+<!DOCTYPE html><html>
+<head>
+<title>Build</title>
+</head>
+<body style="background:#ddd">
+
+
+<script type="text/javascript">
+function script(){var diff=1};
+//Object.freeze(script);
+window.MyID=script;//Object.freeze(window.MyID);
+window.MyID1=script;
+window.MyID2=script;
+window.MyID3=script;
+/*
+#POLYFILL:
+Object.create,
+Object.freeze,
+Object.isFrozen,
+addEventListener
+*/
+console.wrong=function(e){if(e){var n=e.name,m=e.message,s='\u2009';console.error((n && n!="Error"?'Exception'+s+'#'+n:'Error'+s)+(m?':'+s+m:e))}};
+//
+//
+function RunMe(){
+ var Default={alias:'MyID'};
+ function my(p){return p?(RunMe[p]||Default[p]):false};
+
+ var w=window, d=w.document, alias=my('alias'), e=w[alias];
+
+ function isFunction(x){return typeof x=='function'};
+ function areSameFunction(a,b){var f=isFunction,s=String;return f(a)&&f(b)?s(a)==s(b):0};
+
+ var Make={
+	Obj:function(p,c){return Object.create(c||null,p||{})},
+	Event:function(s){var e=new Event(s?s:'');e.informing=function(o){var r=1,p='dispatchEvent';if(o&&o[p]){return o[p](e)}};return e},
+	Exception:function(n,m){throw(this.Obj({'name':{value:n},'message':{value:m}}))}//,...
+ };
+
+ function script(){var diff=2};
+
+ function recall(o){var t=o.timeStamp;console.log(RunMe.again,'re-called',t?'@'+t:'t?')};
+
+ function Build(v){
+	 var t,s='creation',n=my('alias'),x=w[n],o=w[n]=script;
+	 o.created=Make.Event(s).timeStamp;Object.freeze(o);
+	 RunMe.again=n;
+	 RunMe.replaced=x;
+	 d.addEventListener(n,recall,0);
+	 switch(v){
+		case 1: t='exnovo';console.dir(e);break;
+		case 2: t='replaced:'+x;break;
+		case 3: t=n+'freezed.. reallocate:';break;
+	 };
+	 console.info(n,s,t);
+	 return o;
+ };
+
+ try{//Check
+	if(e){//already exist...
+	 var equal=areSameFunction(e,script);
+	 if(equal){
+		if(!Make.Event(RunMe.again).informing(d)){e()};
+	 }else{//different!
+		if(Object.isFrozen(e)){
+		 var i,j=1;while(1){i=String(alias+j);e=w[i];if(!e){break}else if(areSameFunction(e,script)){i=0;break};j++};
+		 if(i){RunMe.alias=i;e=Build(3)};
+		}else{//rewrite...
+		 e=Build(2);
+		};
+	 };
+	}else{//make!
+	 e=Build(1);
+	};
+ }catch(fault){
+  console.wrong(fault);
+ };
+};
+//
+</script>
+
+
+<a href="javascript:RunMe();">RUN CODE</a>
+</body>
+</html>
